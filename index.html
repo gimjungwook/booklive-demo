@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#abc1d1" />
+  <title>이정효 · 정답은 있다 — BookLive 데모</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="phone">
+    <header class="chat-header">
+      <button class="back" aria-label="뒤로">‹</button>
+      <div class="title">
+        <div class="name">이정효 <span class="badge">저자</span></div>
+        <div class="sub">정답은 있다</div>
+      </div>
+      <button class="menu" aria-label="메뉴">≡</button>
+    </header>
+
+    <main id="chat" class="chat" aria-live="polite"></main>
+
+    <div id="quick" class="quick" hidden></div>
+
+    <form id="form" class="composer">
+      <button type="button" class="plus" aria-label="첨부">+</button>
+      <input id="input" type="text" placeholder="메시지 보내기" autocomplete="off" />
+      <button id="send" type="submit" class="send" aria-label="보내기">▶</button>
+    </form>
+  </div>
+
+  <div id="config-banner" class="banner" hidden>
+    <strong>API URL 미설정.</strong>
+    데모 URL 끝에 <code>?api=https://xxx.trycloudflare.com</code> 형태로 백엔드 주소를 붙여 주세요.
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
