@@ -16,7 +16,7 @@
         <div class="name">이정효 <span class="badge">저자</span></div>
         <div class="sub">정답은 있다</div>
       </div>
-      <button id="save-png" class="save" aria-label="대화 저장" title="대화를 이미지로 저장">⬇</button>
+      <button id="save-png" class="save" aria-label="대화 저장" title="대화를 이미지로 저장">save</button>
     </header>
 
     <main id="chat" class="chat" aria-live="polite"></main>
@@ -29,6 +29,16 @@
       <button id="send" type="submit" class="send" aria-label="보내기">▶</button>
     </form>
   </div>
+
+  <dialog id="source-modal" class="source-modal">
+    <div class="source-modal-card">
+      <header class="source-modal-head">
+        <strong id="source-modal-title">근거</strong>
+        <button type="button" id="source-modal-close" aria-label="닫기">×</button>
+      </header>
+      <div id="source-modal-body" class="source-modal-body"></div>
+    </div>
+  </dialog>
 
   <div id="config-banner" class="banner" hidden>
     <strong>API URL 미설정.</strong>

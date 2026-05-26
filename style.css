@@ -46,6 +46,23 @@ html, body {
   cursor: pointer;
   padding: 4px 8px;
 }
+.chat-header .save {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  letter-spacing: 0.3px;
+  padding: 6px 10px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #fafbfc;
+  text-transform: lowercase;
+}
+.chat-header .save:hover {
+  background: #f0f2f4;
+}
+.chat-header .save:disabled {
+  cursor: default;
+}
 .chat-header .title { flex: 1; }
 .chat-header .name {
   font-size: 16px;
@@ -110,6 +127,8 @@ html, body {
   color: rgba(0,0,0,0.45);
   align-self: flex-end;
   margin: 0 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .msg.me .meta { order: -1; }
 
@@ -122,9 +141,85 @@ html, body {
 .msg.them .sources {
   font-size: 11px;
   color: rgba(0, 0, 0, 0.5);
-  margin-top: 4px;
+  margin-top: 6px;
   padding-left: 4px;
   letter-spacing: 0.2px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.msg.them .sources-icon {
+  font-size: 12px;
+  margin-right: 2px;
+}
+.source-chip {
+  font-family: inherit;
+  font-size: 11px;
+  color: #2b5b87;
+  background: rgba(43, 91, 135, 0.08);
+  border: 1px solid rgba(43, 91, 135, 0.18);
+  border-radius: 10px;
+  padding: 2px 8px;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  line-height: 1.4;
+}
+.source-chip:hover {
+  background: rgba(43, 91, 135, 0.16);
+}
+
+.source-modal {
+  border: none;
+  border-radius: 14px;
+  padding: 0;
+  max-width: min(440px, 90vw);
+  width: 90vw;
+  max-height: 80vh;
+  background: #ffffff;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  color: var(--text);
+}
+.source-modal::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+.source-modal-card {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+.source-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: #fafbfc;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+.source-modal-head strong {
+  font-size: 14px;
+  color: #2b5b87;
+  letter-spacing: 0.3px;
+}
+.source-modal-head button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.source-modal-body {
+  padding: 14px 16px 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-y: auto;
 }
 
 .typing .bubble {

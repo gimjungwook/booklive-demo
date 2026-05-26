@@ -85,16 +85,31 @@
     inner.appendChild(row);
 
     if (side === "them" && opts.sources && opts.sources.length > 0) {
-      var pages = [];
+      var seen = {};
+      var uniqueSources = [];
       opts.sources.forEach(function (s) {
-        if (s && s.chapter && pages.indexOf(s.chapter) === -1) {
-          pages.push(s.chapter);
-        }
+        if (!s || !s.chapter || seen[s.chapter]) return;
+        seen[s.chapter] = true;
+        uniqueSources.push(s);
       });
-      if (pages.length > 0) {
+      if (uniqueSources.length > 0) {
         var src = document.createElement("div");
         src.className = "sources";
-        src.textContent = "📖 " + pages.join(", ");
+        var icon = document.createElement("span");
+        icon.className = "sources-icon";
+        icon.textContent = "📖";
+        src.appendChild(icon);
+        uniqueSources.forEach(function (s, i) {
+          if (i > 0) src.appendChild(document.createTextNode(" "));
+          var chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "source-chip";
+          chip.textContent = s.chapter;
+          chip.addEventListener("click", function () {
+            openSourceModal(s);
+          });
+          src.appendChild(chip);
+        });
         inner.appendChild(src);
       }
     }
@@ -260,6 +275,44 @@
   var saveBtn = document.getElementById("save-png");
   if (saveBtn) {
     saveBtn.addEventListener("click", saveChatAsPng);
+  }
+
+  var sourceModal = document.getElementById("source-modal");
+  var sourceModalTitle = document.getElementById("source-modal-title");
+  var sourceModalBody = document.getElementById("source-modal-body");
+  var sourceModalClose = document.getElementById("source-modal-close");
+
+  function openSourceModal(source) {
+    if (!sourceModal || !source) return;
+    var title = source.chapter || "근거";
+    if (source.source) title += " · " + source.source;
+    sourceModalTitle.textContent = title;
+    sourceModalBody.textContent = (source.text && source.text.length > 0)
+      ? source.text
+      : "(본문 미리보기 없음)";
+    if (typeof sourceModal.showModal === "function") {
+      sourceModal.showModal();
+    } else {
+      sourceModal.setAttribute("open", "");
+    }
+  }
+
+  function closeSourceModal() {
+    if (!sourceModal) return;
+    if (typeof sourceModal.close === "function") {
+      sourceModal.close();
+    } else {
+      sourceModal.removeAttribute("open");
+    }
+  }
+
+  if (sourceModalClose) {
+    sourceModalClose.addEventListener("click", closeSourceModal);
+  }
+  if (sourceModal) {
+    sourceModal.addEventListener("click", function (e) {
+      if (e.target === sourceModal) closeSourceModal();
+    });
   }
 
   (async function init() {
