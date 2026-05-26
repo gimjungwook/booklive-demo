@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#abc1d1" />
   <title>이정효 · 정답은 있다 — BookLive 데모</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 </head>
 <body>
   <div class="phone">
@@ -15,7 +16,7 @@
         <div class="name">이정효 <span class="badge">저자</span></div>
         <div class="sub">정답은 있다</div>
       </div>
-      <button class="menu" aria-label="메뉴">≡</button>
+      <button id="save-png" class="save" aria-label="대화 저장" title="대화를 이미지로 저장">⬇</button>
     </header>
 
     <main id="chat" class="chat" aria-live="polite"></main>

@@ -83,6 +83,22 @@
       row.appendChild(meta);
     }
     inner.appendChild(row);
+
+    if (side === "them" && opts.sources && opts.sources.length > 0) {
+      var pages = [];
+      opts.sources.forEach(function (s) {
+        if (s && s.chapter && pages.indexOf(s.chapter) === -1) {
+          pages.push(s.chapter);
+        }
+      });
+      if (pages.length > 0) {
+        var src = document.createElement("div");
+        src.className = "sources";
+        src.textContent = "📖 " + pages.join(", ");
+        inner.appendChild(src);
+      }
+    }
+
     wrap.appendChild(inner);
     chatEl.appendChild(wrap);
     scrollToBottom();
@@ -174,7 +190,7 @@
     try {
       var data = await callQuery(text);
       typing.remove();
-      addMessage("them", data.answer || "(빈 응답)");
+      addMessage("them", data.answer || "(빈 응답)", { sources: data.sources });
     } catch (e) {
       typing.remove();
       addMessage("them", "응답을 받지 못했습니다.\n" + e.message);
@@ -193,11 +209,64 @@
     sendMessage(inputEl.value);
   });
 
+  async function saveChatAsPng() {
+    if (!window.html2canvas) {
+      alert("이미지 변환 라이브러리 로드 실패. 네트워크를 확인해 주세요.");
+      return;
+    }
+    var phone = document.querySelector(".phone");
+    var chat = document.getElementById("chat");
+    var prev = {
+      chatOverflow: chat.style.overflow,
+      chatMaxHeight: chat.style.maxHeight,
+      chatHeight: chat.style.height,
+      phoneHeight: phone.style.height,
+      bodyBg: document.body.style.background
+    };
+    chat.style.overflow = "visible";
+    chat.style.maxHeight = "none";
+    chat.style.height = chat.scrollHeight + "px";
+    phone.style.height = "auto";
+    document.body.style.background = "#d5dde4";
+    await new Promise(function (r) { requestAnimationFrame(function () { r(); }); });
+    var btn = document.getElementById("save-png");
+    if (btn) { btn.disabled = true; btn.style.opacity = "0.5"; }
+    try {
+      var canvas = await window.html2canvas(phone, {
+        scale: 2,
+        backgroundColor: "#abc1d1",
+        useCORS: true,
+        logging: false,
+        windowHeight: phone.scrollHeight
+      });
+      var ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+      var link = document.createElement("a");
+      link.download = "booklive-chat-" + ts + ".png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (e) {
+      console.error(e);
+      alert("PNG 저장 실패: " + (e && e.message ? e.message : e));
+    } finally {
+      chat.style.overflow = prev.chatOverflow;
+      chat.style.maxHeight = prev.chatMaxHeight;
+      chat.style.height = prev.chatHeight;
+      phone.style.height = prev.phoneHeight;
+      document.body.style.background = prev.bodyBg;
+      if (btn) { btn.disabled = false; btn.style.opacity = ""; }
+    }
+  }
+
+  var saveBtn = document.getElementById("save-png");
+  if (saveBtn) {
+    saveBtn.addEventListener("click", saveChatAsPng);
+  }
+
   (async function init() {
     addSystem(new Date().toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric", weekday: "long" }));
     addMessage(
       "them",
-      "안녕하세요. 광주FC 감독 이정효입니다. \n『" + BOOK_TITLE + "』에 담은 이야기, 무엇이든 물어보세요."
+      "안녕하세요. 수원FC 감독 이정효입니다. \n『" + BOOK_TITLE + "』에 담은 이야기, 무엇이든 물어보세요."
     );
     var quick = await fetchRecommendedQuestions();
     setQuickReplies(quick);
