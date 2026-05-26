@@ -47,21 +47,32 @@ html, body {
   padding: 4px 8px;
 }
 .chat-header .save {
-  font-size: 13px;
-  font-weight: 600;
-  color: #555;
-  letter-spacing: 0.3px;
-  padding: 6px 10px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: #fafbfc;
-  text-transform: lowercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 10px;
+  border: none;
+  background: none;
+  color: #444;
+  transition: background-color 0.15s;
+}
+.chat-header .save svg {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 .chat-header .save:hover {
-  background: #f0f2f4;
+  background: rgba(0, 0, 0, 0.06);
+}
+.chat-header .save:active {
+  background: rgba(0, 0, 0, 0.12);
 }
 .chat-header .save:disabled {
   cursor: default;
+  opacity: 0.5;
 }
 .chat-header .title { flex: 1; }
 .chat-header .name {
