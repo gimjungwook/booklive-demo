@@ -56,13 +56,14 @@ html, body {
   border-radius: 10px;
   border: none;
   background: none;
-  color: #444;
+  color: #1a1a1a;
   transition: background-color 0.15s;
 }
 .chat-header .save svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   display: block;
+  stroke: currentColor;
 }
 .chat-header .save:hover {
   background: rgba(0, 0, 0, 0.06);
