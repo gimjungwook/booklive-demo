@@ -205,6 +205,27 @@ html, body {
   font-size: 12px;
   margin-right: 2px;
 }
+button.inline-cite {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 11px;
+  color: #2b5b87;
+  background: rgba(43, 91, 135, 0.1);
+  border: 1px solid rgba(43, 91, 135, 0.2);
+  border-radius: 8px;
+  padding: 0 6px;
+  margin: 0 2px;
+  vertical-align: baseline;
+  line-height: 1.4;
+  cursor: pointer;
+}
+button.inline-cite:hover {
+  background: rgba(43, 91, 135, 0.18);
+}
+button.inline-cite:disabled {
+  cursor: default;
+}
+
 .source-chip {
   font-family: inherit;
   font-size: 11px;

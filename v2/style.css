@@ -1,0 +1,401 @@
+:root {
+  --bg: #f0eee9;
+  --card: #ffffff;
+  --ink: #1f1d1a;
+  --ink-sub: #6b665e;
+  --line: #e4e0d8;
+  --accent: #3D2EE0;
+  --accent-soft: rgba(61, 46, 224, 0.08);
+  --bubble-them: #ffffff;
+  --bubble-me: #3D2EE0;
+  --bubble-me-ink: #ffffff;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: #e6e3dc;
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+.phone {
+  max-width: 480px;
+  margin: 0 auto;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  box-shadow: 0 0 30px rgba(0,0,0,0.1);
+}
+
+.chat-header {
+  background: var(--card);
+  padding: 14px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.chat-header .back {
+  background: none; border: none; font-size: 22px; color: var(--ink);
+  cursor: pointer; padding: 4px 8px;
+}
+.chat-header .title { flex: 1; }
+.chat-header .name { font-size: 16px; font-weight: 700; }
+.chat-header .sub { font-size: 12px; color: var(--ink-sub); margin-top: 2px; }
+
+.icon-btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  padding: 0; border: none; background: none;
+  color: var(--ink); border-radius: 10px;
+  cursor: pointer; transition: background-color 0.15s;
+}
+.icon-btn:hover { background: rgba(0,0,0,0.05); }
+.icon-btn:active { background: rgba(0,0,0,0.1); }
+.icon-btn:disabled { cursor: default; opacity: 0.5; }
+.badge-count {
+  position: absolute; top: 2px; right: 2px;
+  min-width: 16px; height: 16px; padding: 0 4px;
+  background: var(--accent); color: #fff;
+  font-size: 10px; font-weight: 700; line-height: 16px;
+  border-radius: 8px; text-align: center;
+}
+
+.chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg);
+}
+
+.msg {
+  display: flex;
+  max-width: 84%;
+  word-break: break-word;
+}
+.msg .bubble {
+  padding: 11px 14px;
+  border-radius: 16px;
+  font-size: 15px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  position: relative;
+}
+.msg.them { align-self: flex-start; }
+.msg.them .bubble {
+  background: var(--bubble-them);
+  color: var(--ink);
+  border-top-left-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.msg.me { align-self: flex-end; }
+.msg.me .bubble {
+  background: var(--bubble-me);
+  color: var(--bubble-me-ink);
+  border-top-right-radius: 6px;
+}
+.msg .meta {
+  font-size: 10px;
+  color: var(--ink-sub);
+  align-self: flex-end;
+  margin: 0 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.msg.me .meta { order: -1; }
+.msg.them .name {
+  font-size: 12px;
+  color: var(--ink-sub);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+/* 마크다운 렌더링 */
+.msg .bubble.md { white-space: normal; word-break: break-word; }
+.msg .bubble.md > *:first-child { margin-top: 0; }
+.msg .bubble.md > *:last-child { margin-bottom: 0; }
+.msg .bubble.md p { margin: 0 0 6px; }
+.msg .bubble.md p:last-child { margin-bottom: 0; }
+.msg .bubble.md ul, .msg .bubble.md ol { margin: 4px 0 6px; padding-left: 20px; }
+.msg .bubble.md li { margin: 2px 0; }
+.msg .bubble.md strong { font-weight: 700; }
+.msg .bubble.md em { font-style: italic; }
+.msg .bubble.md code {
+  background: rgba(0,0,0,0.06); padding: 1px 4px; border-radius: 3px; font-size: 13px;
+}
+.msg .bubble.md h1, .msg .bubble.md h2, .msg .bubble.md h3 {
+  font-size: 15px; font-weight: 700; margin: 6px 0 4px;
+}
+.msg .bubble.md blockquote {
+  margin: 6px 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 4px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.msg .bubble.md a { color: var(--accent); text-decoration: underline; }
+
+/* 인라인 인용 chip */
+button.inline-cite {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid rgba(61, 46, 224, 0.2);
+  border-radius: 8px;
+  padding: 0 6px;
+  margin: 0 2px;
+  vertical-align: baseline;
+  line-height: 1.4;
+  cursor: pointer;
+}
+button.inline-cite:hover { background: rgba(61, 46, 224, 0.16); }
+button.inline-cite:disabled { cursor: default; opacity: 0.6; }
+
+/* 북마크 버튼 (말풍선 우상단) */
+.bm-toggle {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 28px; height: 28px;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  color: var(--ink-sub);
+}
+.bm-toggle:hover { color: var(--accent); }
+.bm-toggle.on { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.bm-toggle svg { width: 14px; height: 14px; }
+
+/* 책 카드 (구매 CTA) */
+.book-card {
+  align-self: flex-start;
+  max-width: 86%;
+  background: var(--card);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.book-card .cover {
+  width: 56px; height: 78px;
+  background: linear-gradient(135deg, #fae100 0%, #ffb800 100%);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: #1a1a1a;
+  flex-shrink: 0;
+  text-align: center; padding: 4px;
+  line-height: 1.15;
+}
+.book-card .info { flex: 1; min-width: 0; }
+.book-card .info .t { font-size: 13px; font-weight: 700; color: var(--ink); }
+.book-card .info .a { font-size: 11px; color: var(--ink-sub); margin-top: 2px; }
+.book-card .info .p { font-size: 14px; font-weight: 700; color: var(--accent); margin-top: 4px; }
+.book-card .buy {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-family: inherit;
+  font-size: 12px; font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.book-card .buy:hover { filter: brightness(1.05); }
+
+/* 추천 질문 — 디자이너 톤: 세로 리스트 */
+.quick {
+  padding: 8px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--bg);
+  flex-shrink: 0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.quick button {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 9px 14px;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.quick button::before {
+  content: "›";
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
+}
+.quick button:hover { border-color: var(--accent); }
+.quick button:active { background: var(--accent-soft); }
+
+/* typing dots */
+.typing .bubble {
+  background: var(--bubble-them);
+  padding: 12px 14px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.typing .dots { display: inline-flex; gap: 4px; }
+.typing .dots span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ink-sub);
+  animation: blink 1.2s infinite;
+}
+.typing .dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing .dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink {
+  0%, 60%, 100% { opacity: 0.3; }
+  30% { opacity: 1; }
+}
+
+/* composer */
+.composer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.composer input {
+  flex: 1;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+}
+.composer input:focus { border-color: var(--accent); background: #fff; }
+.composer .send {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  width: 40px; height: 40px;
+  border-radius: 20px;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+}
+.composer .send.active { opacity: 1; }
+
+.banner {
+  position: fixed;
+  left: 12px; right: 12px; top: 12px;
+  background: #fff3cd;
+  border: 1px solid #ffe69c;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #664d00;
+  max-width: 480px;
+  margin: 0 auto;
+  z-index: 10;
+}
+.banner code {
+  background: rgba(0,0,0,0.06);
+  padding: 1px 4px; border-radius: 4px; font-size: 12px;
+}
+
+.system {
+  text-align: center;
+  color: var(--ink-sub);
+  font-size: 11px;
+  margin: 8px 0;
+}
+
+/* source modal */
+.source-modal {
+  border: none;
+  border-radius: 16px;
+  padding: 0;
+  max-width: min(440px, 90vw);
+  width: 90vw;
+  max-height: 80vh;
+  background: var(--card);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+  color: var(--ink);
+}
+.source-modal::backdrop { background: rgba(0,0,0,0.45); }
+.source-modal-card { display: flex; flex-direction: column; max-height: 80vh; }
+.source-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.source-modal-head strong { font-size: 14px; color: var(--accent); letter-spacing: 0.3px; }
+.source-modal-head button {
+  background: none; border: none; font-size: 22px; line-height: 1;
+  color: var(--ink-sub); cursor: pointer; padding: 0 4px;
+}
+.source-modal-body {
+  padding: 14px 16px 18px;
+  font-size: 14px; line-height: 1.6;
+  white-space: pre-wrap; word-break: break-word;
+  overflow-y: auto;
+}
+
+/* bookmark list */
+.bookmark-list { padding: 0; }
+.bookmark-list:empty::before {
+  content: "아직 북마크한 답변이 없어요.";
+  display: block;
+  padding: 24px 16px;
+  color: var(--ink-sub);
+  font-size: 13px;
+  text-align: center;
+}
+.bookmark-list .item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.bookmark-list .item:hover { background: var(--bg); }
+.bookmark-list .item:last-child { border-bottom: none; }
+.bookmark-list .item .q {
+  font-size: 12px; color: var(--ink-sub); margin-bottom: 4px;
+}
+.bookmark-list .item .a {
+  font-size: 13px; color: var(--ink);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.bookmark-list .item .pages {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--accent);
+}
