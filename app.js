@@ -69,7 +69,19 @@
 
     var bubble = document.createElement("div");
     bubble.className = "bubble";
-    bubble.textContent = text;
+    if (side === "them" && window.marked && window.DOMPurify) {
+      // LLM 답변은 가끔 마크다운(**굵게**, - 항목, # 헤더 등)을 섞어 보낸다. 안전하게 렌더링.
+      try {
+        var rendered = window.marked.parse(text || "", { breaks: true, gfm: true });
+        bubble.innerHTML = window.DOMPurify.sanitize(rendered);
+        bubble.classList.add("md");
+      } catch (e) {
+        console.warn("markdown render failed:", e);
+        bubble.textContent = text;
+      }
+    } else {
+      bubble.textContent = text;
+    }
 
     var meta = document.createElement("div");
     meta.className = "meta";
