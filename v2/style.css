@@ -183,6 +183,69 @@ button.inline-cite:disabled { cursor: default; opacity: 0.6; }
 .bm-toggle.on { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
 .bm-toggle svg { width: 14px; height: 14px; }
 
+/* 인용 카드 (인라인 펼침) — 디자이너 A형 'COLLECTION 일침' */
+.cite-card {
+  align-self: flex-start;
+  max-width: 86%;
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.cite-card .head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  background: var(--accent-soft);
+  border-bottom: 1px solid var(--line);
+}
+.cite-card .head .label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.cite-card .head .pg {
+  font-size: 12px;
+  color: var(--ink-sub);
+  font-weight: 600;
+}
+.cite-card .body {
+  padding: 12px 14px 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.cite-card .actions {
+  display: flex;
+  border-top: 1px solid var(--line);
+}
+.cite-card .actions button {
+  flex: 1;
+  background: var(--card);
+  border: none;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.cite-card .actions button:hover { background: var(--bg); }
+.cite-card .actions .save-quote { color: var(--accent); font-weight: 700; }
+.cite-card .actions .save-quote.saved {
+  background: var(--accent-soft);
+}
+.cite-card .actions .save-quote svg { width: 14px; height: 14px; }
+
 /* 책 카드 (구매 CTA) */
 .book-card {
   align-self: flex-start;
@@ -368,6 +431,48 @@ button.inline-cite:disabled { cursor: default; opacity: 0.6; }
   white-space: pre-wrap; word-break: break-word;
   overflow-y: auto;
 }
+
+/* 구절 컬렉션 */
+.collection-list { padding: 0; }
+.collection-list:empty::before {
+  content: "아직 소장한 구절이 없어요.\A 답변 안의 인용 박스에서 '구절 소장하기'를 눌러 보세요.";
+  display: block;
+  padding: 24px 16px;
+  color: var(--ink-sub);
+  font-size: 13px;
+  text-align: center;
+  white-space: pre;
+}
+.collection-list .quote-item {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.collection-list .quote-item:last-child { border-bottom: none; }
+.collection-list .quote-item .pg {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.collection-list .quote-item .qt {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.6;
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+  margin-bottom: 6px;
+}
+.collection-list .quote-item .rm {
+  font-size: 11px;
+  color: var(--ink-sub);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+.collection-list .quote-item .rm:hover { color: #c0392b; }
 
 /* bookmark list */
 .bookmark-list { padding: 0; }

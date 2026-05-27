@@ -7,6 +7,7 @@
   var BOOK_PRICE = "₩16,800";
   var BOOK_BUY_URL = "https://product.kyobobook.co.kr/search?keyword=" + encodeURIComponent(BOOK_TITLE + " " + AUTHOR_NAME);
   var BOOKMARK_KEY = "booklive_bookmarks_v2";
+  var QUOTES_KEY = "booklive_quotes_v2";
   var BOOK_CARD_AFTER_TURN = 3; // 답변 3개 뒤에 책 카드 자동 노출
 
   var DEFAULT_QUICK = [
@@ -27,6 +28,7 @@
   var sendEl = document.getElementById("send");
   var bannerEl = document.getElementById("config-banner");
   var bookmarkCountEl = document.getElementById("bookmark-count");
+  var collectionCountEl = document.getElementById("collection-count");
 
   if (!API_BASE) bannerEl.hidden = false;
 
@@ -78,6 +80,46 @@
     return idx < 0;
   }
 
+  // 구절 컬렉션 (인용 카드의 "구절 소장하기")
+  function loadQuotes() {
+    try { return JSON.parse(localStorage.getItem(QUOTES_KEY) || "[]"); }
+    catch (e) { return []; }
+  }
+  function saveQuotes(list) {
+    localStorage.setItem(QUOTES_KEY, JSON.stringify(list));
+    refreshCollectionCount();
+  }
+  function refreshCollectionCount() {
+    var n = loadQuotes().length;
+    if (n > 0) {
+      collectionCountEl.textContent = n;
+      collectionCountEl.hidden = false;
+    } else {
+      collectionCountEl.hidden = true;
+    }
+  }
+  function quoteId(source) {
+    return (source.chapter || "p?") + "::" + (source.text || "").slice(0, 60);
+  }
+  function isQuoteSaved(source) {
+    var id = quoteId(source);
+    return loadQuotes().some(function (q) { return q.id === id; });
+  }
+  function toggleQuote(source) {
+    var id = quoteId(source);
+    var list = loadQuotes();
+    var idx = list.findIndex(function (q) { return q.id === id; });
+    if (idx >= 0) list.splice(idx, 1);
+    else list.unshift({
+      id: id,
+      ts: new Date().toISOString(),
+      chapter: source.chapter,
+      text: source.text
+    });
+    saveQuotes(list);
+    return idx < 0;
+  }
+
   function addMessage(side, text, opts) {
     opts = opts || {};
     var wrap = document.createElement("div");
@@ -116,7 +158,7 @@
             var ch = btn.getAttribute("data-chapter");
             var src = opts.sources.find(function (s) { return s && s.chapter === ch; });
             if (src) {
-              btn.addEventListener("click", function () { openSourceModal(src); });
+              btn.addEventListener("click", function () { toggleCiteCard(wrap, src); });
             } else {
               btn.disabled = true;
             }
@@ -169,6 +211,43 @@
     chatEl.appendChild(wrap);
     scrollToBottom();
     return wrap;
+  }
+
+  // chip 클릭 시 해당 메시지 직후에 인용 카드 토글 (이미 열려있으면 닫음)
+  function toggleCiteCard(msgWrap, source) {
+    var existing = msgWrap.nextElementSibling;
+    if (existing && existing.classList.contains("cite-card") && existing.dataset.chapter === source.chapter) {
+      existing.remove();
+      return;
+    }
+    var card = document.createElement("div");
+    card.className = "cite-card";
+    card.dataset.chapter = source.chapter || "";
+    var saved = isQuoteSaved(source);
+    card.innerHTML =
+      '<div class="head">' +
+        '<span class="label">COLLECTION · 이정효의 일침</span>' +
+        '<span class="pg">' + (source.chapter || "") + '</span>' +
+      '</div>' +
+      '<div class="body"></div>' +
+      '<div class="actions">' +
+        '<button type="button" class="close-card">접기</button>' +
+        '<button type="button" class="save-quote' + (saved ? ' saved' : '') + '">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>' +
+          '<span class="lbl">' + (saved ? '소장됨' : '구절 소장하기') + '</span>' +
+        '</button>' +
+      '</div>';
+    card.querySelector(".body").textContent = source.text || "(본문 미리보기 없음)";
+    card.querySelector(".close-card").addEventListener("click", function () { card.remove(); });
+    var saveBtn = card.querySelector(".save-quote");
+    var saveLbl = saveBtn.querySelector(".lbl");
+    saveBtn.addEventListener("click", function () {
+      var added = toggleQuote(source);
+      saveBtn.classList.toggle("saved", added);
+      saveLbl.textContent = added ? "소장됨" : "구절 소장하기";
+    });
+    msgWrap.insertAdjacentElement("afterend", card);
+    scrollToBottom();
   }
 
   function addBookCard() {
@@ -405,7 +484,49 @@
   }
   if (bmListBtn) bmListBtn.addEventListener("click", openBookmarkModal);
 
+  // 구절 컬렉션 모달
+  var colModal = document.getElementById("collection-modal");
+  var colModalBody = document.getElementById("collection-modal-body");
+  var colModalClose = document.getElementById("collection-modal-close");
+  var colBtn = document.getElementById("collection-btn");
+
+  function renderCollection() {
+    var list = loadQuotes();
+    colModalBody.innerHTML = "";
+    list.forEach(function (q) {
+      var item = document.createElement("div");
+      item.className = "quote-item";
+      item.innerHTML =
+        '<div class="pg">' + escapeHtml(q.chapter || "p.?") + '</div>' +
+        '<div class="qt">' + escapeHtml(q.text || "") + '</div>' +
+        '<button type="button" class="rm">제거</button>';
+      item.querySelector(".rm").addEventListener("click", function () {
+        var arr = loadQuotes().filter(function (x) { return x.id !== q.id; });
+        saveQuotes(arr);
+        renderCollection();
+      });
+      colModalBody.appendChild(item);
+    });
+  }
+  function openCollectionModal() {
+    renderCollection();
+    if (typeof colModal.showModal === "function") colModal.showModal();
+    else colModal.setAttribute("open", "");
+  }
+  function closeCollectionModal() {
+    if (typeof colModal.close === "function") colModal.close();
+    else colModal.removeAttribute("open");
+  }
+  if (colModalClose) colModalClose.addEventListener("click", closeCollectionModal);
+  if (colModal) {
+    colModal.addEventListener("click", function (e) {
+      if (e.target === colModal) closeCollectionModal();
+    });
+  }
+  if (colBtn) colBtn.addEventListener("click", openCollectionModal);
+
   refreshBookmarkCount();
+  refreshCollectionCount();
 
   (async function init() {
     addSystem(new Date().toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric", weekday: "long" }));

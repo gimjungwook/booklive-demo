@@ -19,6 +19,13 @@
         <div class="name">이정효</div>
         <div class="sub">『정답은 있다』 저자</div>
       </div>
+      <button id="collection-btn" class="icon-btn" aria-label="구절 컬렉션" title="이정효의 일침">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+        <span id="collection-count" class="badge-count" hidden>0</span>
+      </button>
       <button id="bookmark-list-btn" class="icon-btn" aria-label="북마크 보기" title="북마크">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
@@ -56,6 +63,16 @@
         <button type="button" id="source-modal-close" aria-label="닫기">×</button>
       </header>
       <div id="source-modal-body" class="source-modal-body"></div>
+    </div>
+  </dialog>
+
+  <dialog id="collection-modal" class="source-modal">
+    <div class="source-modal-card">
+      <header class="source-modal-head">
+        <strong>📖 이정효의 일침</strong>
+        <button type="button" id="collection-modal-close" aria-label="닫기">×</button>
+      </header>
+      <div id="collection-modal-body" class="source-modal-body collection-list"></div>
     </div>
   </dialog>
 
